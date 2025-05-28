@@ -15,7 +15,7 @@
                 <li><a href="services.html">Services</a></li>
                 <li><a href="about.html">About</a></li>
                 <li><a href="contact.html">Contact</a></li>
-                <li><a href="#">Cart</a></li>
+                <li><a href="#" id="cart-button">Cart (<span id="cart-count">0</span>)</a></li>
             </ul>
         </nav>
     </header>
@@ -56,5 +56,50 @@
     <footer>
         <p>© 2025 HexaCreative Auto Gallery. All rights reserved.</p>
     </footer>
+    <div id="cart-modal" class="cart-modal hidden">
+        <h3>Isi Keranjang</h3>
+        <ul id="cart-items"></ul>
+        <button onclick="closeCart()">Tutup</button>
+    </div>
+
+    <script>
+        let cart = [];
+        const cartCount = document.getElementById("cart-count");
+        const cartItems = document.getElementById("cart-items");
+        const cartModal = document.getElementById("cart-modal");
+    
+        document.querySelectorAll(".product button").forEach((btn, index) => {
+            btn.addEventListener("click", () => {
+                const productName = btn.parentElement.querySelector("h2").innerText;
+                cart.push(productName);
+                cartCount.innerText = cart.length;
+    
+                btn.innerText = "✓ Ditambahkan!";
+                btn.style.backgroundColor = "#27ae60";
+                setTimeout(() => {
+                    btn.innerText = "Add to Cart";
+                    btn.style.backgroundColor = "#333";
+                }, 1200);
+            });
+        });
+    
+        document.getElementById("cart-button").addEventListener("click", () => {
+            if (cart.length === 0) {
+                cartItems.innerHTML = "<li>Keranjang kosong</li>";
+            } else {
+                cartItems.innerHTML = "";
+                cart.forEach((item, i) => {
+                    const li = document.createElement("li");
+                    li.innerText = `${i+1}. ${item}`;
+                    cartItems.appendChild(li);
+                });
+            }
+            cartModal.classList.remove("hidden");
+        });
+    
+        function closeCart() {
+            cartModal.classList.add("hidden");
+        }
+    </script>
 </body>
 </html>
